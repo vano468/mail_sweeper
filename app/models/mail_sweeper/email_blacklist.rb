@@ -1,9 +1,6 @@
 module MailSweeper
   class EmailBlacklist < ActiveRecord::Base
-    DEFAULT_BLOCK_COUNTER = 0
-    BLOCK_MODIFIER        = 4.weeks
-
-    after_initialize :set_block_counter
+    BLOCK_MODIFIER = 4.weeks
 
     validates :email, presence: true, uniqueness: true
     validates :block_counter, presence: true, numericality: { greater_than: 0 }
@@ -71,10 +68,6 @@ module MailSweeper
 
     def calculate_unblock_date
       Time.now + block_counter * BLOCK_MODIFIER
-    end
-
-    def set_block_counter
-      self.block_counter ||= DEFAULT_BLOCK_COUNTER
     end
 
     def check_consistency_blocked_and_blocked_until

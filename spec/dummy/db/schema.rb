@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20160714090144) do
 
   create_table "mail_sweeper_email_blacklists", force: :cascade do |t|
     t.string   "email",                         null: false
-    t.integer  "block_counter",                 null: false
+    t.integer  "block_counter", default: 0,     null: false
     t.datetime "blocked_until"
     t.boolean  "blocked",       default: false
     t.datetime "created_at",                    null: false
