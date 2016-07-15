@@ -4,7 +4,7 @@ class CreateMailSweeperEmailBlacklists < ActiveRecord::Migration
       t.string :email, null: false
       t.integer :block_counter, null: false, default: 0
       t.datetime :blocked_until
-      t.boolean :blocked, default: false
+      t.boolean :permanently_blocked, default: false
 
       t.timestamps null: false
     end

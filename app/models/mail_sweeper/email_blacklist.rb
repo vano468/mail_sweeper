@@ -4,13 +4,19 @@ module MailSweeper
 
     validates :email, presence: true, uniqueness: true
     validates :block_counter, presence: true, numericality: { greater_than: 0 }
-    validate :check_consistency_blocked_and_blocked_until
 
     scope :with_email, -> (email) { where(email: email) }
-    scope :only_blocked, -> { where(blocked: true) }
+    scope :only_blocked, -> {
+      conditions = [
+        arel_table[:permanently_blocked].eq(true),
+        arel_table[:blocked_until].gt(Time.now)
+      ]
+
+      where(conditions.reduce(&:or))
+    }
     scope :only_for_unblock, -> {
       conditions = [
-        arel_table[:blocked].eq(true),
+        arel_table[:permanently_blocked].eq(false),
         arel_table[:blocked_until].lteq(Time.now)
       ]
 
@@ -46,7 +52,7 @@ module MailSweeper
 
     def block!
       self.block_counter += 1
-      self.blocked = true
+      self.permanently_blocked = false
       self.blocked_until = calculate_unblock_date
 
       save!
@@ -54,26 +60,20 @@ module MailSweeper
 
     def permanet_block!
       self.block_counter += 1
-      self.blocked = true
+      self.permanently_blocked = true
       self.blocked_until = nil
 
       save!
     end
 
     def unblock!
-      update!(blocked_until: nil, blocked: false)
+      update!(blocked_until: nil, permanently_blocked: false)
     end
 
     private
 
     def calculate_unblock_date
       Time.now + block_counter * BLOCK_MODIFIER
-    end
-
-    def check_consistency_blocked_and_blocked_until
-      if blocked_until.present? && blocked == false
-        errors.add :blocked, "can not be false if blocked_until is present"
-      end
     end
   end
 end

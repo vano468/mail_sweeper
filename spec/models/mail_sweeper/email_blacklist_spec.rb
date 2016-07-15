@@ -11,7 +11,7 @@ describe MailSweeper::EmailBlacklist do
       let!(:email_blacklist) { MailSweeper::EmailBlacklist.block!(email) }
 
       it 'blocks email permanently' do
-        expect(subject.blocked).to be_truthy
+        expect(subject.permanently_blocked).to be_truthy
         expect(subject.blocked_until).to be_nil
       end
 
@@ -29,7 +29,7 @@ describe MailSweeper::EmailBlacklist do
       let!(:modifier) { 1 }
 
       it 'blocks email until the date based on modifier' do
-        expect(subject.blocked).to be_truthy
+        expect(subject.permanently_blocked).to be_truthy
         expect(subject.blocked_until).to be_nil
       end
     end
@@ -48,7 +48,7 @@ describe MailSweeper::EmailBlacklist do
       let!(:email_blacklist) { MailSweeper::EmailBlacklist.block!(email) }
 
       it 'blocks email until the date based on modifier' do
-        expect(subject.blocked).to be_truthy
+        expect(subject.permanently_blocked).to be_falsey
         expect(subject.blocked_until).to eq(curret_time + modifier * 4.weeks)
       end
 
@@ -66,7 +66,7 @@ describe MailSweeper::EmailBlacklist do
       let!(:modifier) { 1 }
 
       it 'blocks email until the date based on modifier' do
-        expect(subject.blocked).to be_truthy
+        expect(subject.permanently_blocked).to be_falsey
         expect(subject.blocked_until).to eq(curret_time + modifier * 4.weeks)
       end
     end
@@ -84,8 +84,8 @@ describe MailSweeper::EmailBlacklist do
       let!(:email_blacklist) { MailSweeper::EmailBlacklist.block!(email) }
 
       it 'unblocks email' do
+        expect(subject.permanently_blocked).to be_falsey
         expect(subject.blocked_until).to be_nil
-        expect(subject.blocked).to be_falsey
       end
     end
 
@@ -104,6 +104,14 @@ describe MailSweeper::EmailBlacklist do
 
       context "with blocked email" do
         before { MailSweeper::EmailBlacklist.block!(email) }
+
+        it 'returns true' do
+          expect(subject).to be_truthy
+        end
+      end
+
+      context "with permanently blocked email" do
+        before { MailSweeper::EmailBlacklist.permanent_block!(email) }
 
         it 'returns true' do
           expect(subject).to be_truthy

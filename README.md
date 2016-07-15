@@ -20,11 +20,6 @@ rake db:migrate
 
 * Configure SES with SNS on url `http://<HOST>/mail_sweeper/sns`
 
-* For unblock emails run this task on schedule:
-```
-rake mail_sweeper:sweep
-```
-
 ## Usage
 
 ```
