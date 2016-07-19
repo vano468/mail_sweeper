@@ -1,6 +1,7 @@
 module MailSweeper
   class EmailBlacklist < ActiveRecord::Base
-    BLOCK_MODIFIER = 4.weeks
+    START_BLOCK_MODIFIER = 1.week
+    BLOCK_MODIFIER       = 4.weeks
 
     validates :email, presence: true, uniqueness: true
     validates :block_counter, presence: true, numericality: { greater_than: 0 }
@@ -73,7 +74,13 @@ module MailSweeper
     private
 
     def calculate_unblock_date
-      Time.now + block_counter * BLOCK_MODIFIER
+      distance = if block_counter == 1
+        START_BLOCK_MODIFIER
+      else
+        BLOCK_MODIFIER ** (block_counter - 1)
+      end
+
+      Time.now + distance
     end
   end
 end

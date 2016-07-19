@@ -44,12 +44,11 @@ describe MailSweeper::EmailBlacklist do
     before { allow(Time).to receive(:now).and_return(curret_time) }
 
     context "with exists email" do
-      let!(:modifier) { 2 }
       let!(:email_blacklist) { MailSweeper::EmailBlacklist.block!(email) }
 
       it 'blocks email until the date based on modifier' do
         expect(subject.permanently_blocked).to be_falsey
-        expect(subject.blocked_until).to eq(curret_time + modifier * 4.weeks)
+        expect(subject.blocked_until).to eq(curret_time + 4.weeks)
       end
 
       it 'increases the block counter' do
@@ -63,11 +62,9 @@ describe MailSweeper::EmailBlacklist do
     end
 
     context "with not exists email" do
-      let!(:modifier) { 1 }
-
       it 'blocks email until the date based on modifier' do
         expect(subject.permanently_blocked).to be_falsey
-        expect(subject.blocked_until).to eq(curret_time + modifier * 4.weeks)
+        expect(subject.blocked_until).to eq(curret_time + 1.week)
       end
     end
   end
