@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = MailSweeper::VERSION
   s.authors     = ["vad4msiu"]
   s.email       = ["vad4msiu@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of MailSweeper."
-  s.description = "TODO: Description of MailSweeper."
+  s.homepage    = "https://github.com/vad4msiu/mail_sweeper"
+  s.summary     = "Clean up your email list from bad contacts"
+  s.description = "Clean up your email list from bad contacts"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
