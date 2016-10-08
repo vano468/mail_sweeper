@@ -4,6 +4,8 @@ class MailSweeper::SnsHandlerController < ApplicationController
   def sns
     result = MailSweeper::SnsNotificationService.perform(notification)
 
+    Logger.new("#{Rails.root}/log/ses.log").info notification
+
     if result
       render nothing: true
     else
