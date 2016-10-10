@@ -3,6 +3,8 @@ module MailSweeper
     START_BLOCK_MODIFIER = 1.week
     BLOCK_MODIFIER       = 4.weeks
 
+    attr_accessible :email, :block_counter, :blocked_until, :permanently_blocked
+
     validates :email, presence: true, uniqueness: true
     validates :block_counter, presence: true, numericality: { greater_than: 0 }
 
