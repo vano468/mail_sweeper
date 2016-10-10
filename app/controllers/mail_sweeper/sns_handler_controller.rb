@@ -1,15 +1,15 @@
-class MailSweeper::SnsHandlerController < ApplicationController
+class MailSweeper::SnsHandlerController < ActionController::Base
+  protect_from_forgery with: :exception
   skip_before_action :verify_authenticity_token
 
   def sns
+    Logger.new("#{Rails.root}/log/ses.log").info notification
     result = MailSweeper::SnsNotificationService.perform(notification)
 
-    Logger.new("#{Rails.root}/log/ses.log").info notification
-
     if result
-      render nothing: true
+      head :ok
     else
-      render nothing: true, status: :internal_server_error
+      head :internal_server_error
     end
   end
 

@@ -11,8 +11,12 @@ module MailSweeper
     end
 
     def perform
-      response = HTTParty.get(callback_url)
-      response.code.to_i < 400
+      if callback_url
+        response = HTTParty.get(callback_url)
+        response.code.to_i < 400
+      else
+        true
+      end
     end
 
     private
