@@ -1,5 +1,5 @@
 module MailSweeper
-  class EmailBlacklist < ActiveRecord::Base
+  class EmailBlacklist < ApplicationRecord
     START_BLOCK_MODIFIER = 1.week
     BLOCK_MODIFIER       = 4.weeks
 
